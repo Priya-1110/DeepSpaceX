@@ -10,7 +10,7 @@ const NEO = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/neo')
+axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/neo`)
       .then(res => {
         setNeos(res.data);
         setLoading(false);

@@ -20,7 +20,7 @@ export default function Mars() {
     const params = { rover, sol };
     if (camera) params.camera = camera;
 
-    axios.get('http://localhost:5000/api/mars', { params })
+   axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/mars`, { params })
       .then(res => {
         setPhotos(res.data);
         setLoading(false);

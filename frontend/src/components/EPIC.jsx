@@ -7,7 +7,7 @@ const EPIC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/epic')
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/epic`)
       .then(res => {
         setImages(res.data);
         setLoading(false);

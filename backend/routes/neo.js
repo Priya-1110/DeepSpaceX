@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
-const NASA_API_KEY = 'YCZeX6qrrrkUBuKe1cjMlakie9etBTRzZ7WDetZx'; // Replace with your real key
+
 
 router.get('/', async (req, res) => {
   const today = new Date().toISOString().split('T')[0];

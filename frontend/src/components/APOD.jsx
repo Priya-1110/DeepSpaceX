@@ -6,8 +6,7 @@ export default function APOD() {
   const [apod, setApod] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/apod')
+  useEffect(() => {axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/apod`)
       .then(res => {
         setApod(res.data);
         setLoading(false);
