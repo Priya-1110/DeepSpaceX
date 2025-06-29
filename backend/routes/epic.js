@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const router = express.Router();
 
+const NASA_API_KEY = 'YCZeX6qrrrkUBuKe1cjMlakie9etBTRzZ7WDetZx';
 
 router.get('/', async (req, res) => {
   const mode = req.query.mode === 'enhanced' ? 'enhanced' : 'natural';
