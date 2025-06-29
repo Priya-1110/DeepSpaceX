@@ -147,12 +147,6 @@ This project is for educational and demonstration purposes only.
 
 ---
 
-## ✨ Screenshots
-
-*(Include here a few images or GIFs of each page with cosmic visuals)*
-
----
-
 ## ✈️ Author
 
 Built with ❤️ by Priya Shanmugam 
