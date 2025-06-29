@@ -9,7 +9,7 @@ const tiles = [
   {
     label: 'APOD',
     to: '/apod',
-    riddle: "I catch the cosmos' daily breath",
+    riddle: "I catch the cosmos’ daily breath",
   },
   {
     label: 'Mars Rover',
@@ -19,12 +19,22 @@ const tiles = [
   {
     label: 'EPIC Earth',
     to: '/epic',
-    riddle: "I blink from Earth's polar gaze",
+    riddle: "I blink from Earth’s polar gaze",
   },
   {
     label: 'NEOs',
     to: '/neo',
     riddle: "I warn when danger from the skies arrives",
+  },
+  {
+    label: 'DONKI',
+    to: '/donki',
+    riddle: "I monitor the sun’s tempers and storms",
+  },
+  {
+    label: 'Library',
+    to: '/library',
+    riddle: "I hold cosmic memories of light and sound",
   },
 ];
 
@@ -32,12 +42,22 @@ export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
   const audioRef = useRef(new Audio(clickSfx));
   const bgAudioRef = useRef(null);
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowIntro(false), 3000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (bgAudioRef.current) {
+      bgAudioRef.current.muted = muted;
+      const playPromise = bgAudioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
+    }
+  }, [muted]);
 
   const playClick = () => {
     const sound = audioRef.current;
@@ -75,39 +95,41 @@ export default function Home() {
       </video>
 
       {/* Background Music */}
-      <audio ref={bgAudioRef} src={spaceAmbience} autoPlay loop />
+      <audio ref={bgAudioRef} src={spaceAmbience} autoPlay loop muted={muted} />
 
       {/* Volume Button */}
       <button
         onClick={toggleMute}
         className="absolute top-5 right-5 z-10 bg-black/50 border border-white px-3 py-1 rounded text-sm hover:bg-white hover:text-black transition"
       >
-        {muted ? '🔇 Mute' : '🔊 Sound'}
+        {muted ? '🔇 Sound' : '🔊 Sound'}
       </button>
 
       {/* Header */}
-      <div className="flex items-center justify-center mb-12 z-10">
-        <h1 className="text-4xl sm:text-5xl font-bold text-white whitespace-nowrap">
-          Welcome to <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300 text-transparent bg-clip-text">DeepSpaceX</span>
-        </h1>
-      </div>
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-4xl sm:text-5xl font-bold text-white mb-12 text-center z-10"
+      >
+        Welcome to <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300 text-transparent bg-clip-text">DeepSpaceX</span>
+      </motion.h1>
 
-      {/* Riddle Tiles */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 z-10">
+      {/* Riddle Tiles Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 z-10 w-full max-w-6xl px-4">
         {tiles.map(({ label, to, riddle }) => (
           <Link
             key={label}
             to={to}
             onMouseEnter={playClick}
-            className="relative w-72 h-40 bg-black/60 border border-white/30 rounded-2xl shadow-xl transition-transform duration-500 backdrop-blur-md group overflow-hidden hover:shadow-[0_0_30px_gold] hover:border-yellow-300"
+            className="relative group flex items-center justify-center h-36 p-4 rounded-xl border border-cyan-400 bg-black/50 backdrop-blur-md text-center text-white font-semibold transition-transform transform hover:scale-105 hover:shadow-[0_0_30px_cyan] hover:border-cyan-300"
           >
-            <div className="absolute inset-0 animate-pulse opacity-10 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-400 rounded-2xl blur-xl"></div>
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-4">
-              <p className="text-sm text-center italic text-slate-300 mb-2">{riddle}</p>
-              <p className="text-2xl font-bold text-yellow-300 tracking-wide opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out">
-                {label}
-              </p>
-            </div>
+            <span className="absolute text-xl font-bold text-yellow-300 opacity-0 group-hover:opacity-100 transition duration-300">
+              {label}
+            </span>
+            <span className="text-lg sm:text-xl italic transition duration-300 group-hover:opacity-0">
+              {riddle}
+            </span>
           </Link>
         ))}
       </div>

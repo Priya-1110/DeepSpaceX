@@ -14,13 +14,14 @@ export default function Mars() {
   const [rover, setRover] = useState('curiosity');
   const [sol, setSol] = useState(1000);
   const [camera, setCamera] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const fetchPhotos = () => {
     setLoading(true);
     const params = { rover, sol };
     if (camera) params.camera = camera;
 
-   axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/mars`, { params })
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/mars`, { params })
       .then(res => {
         setPhotos(res.data);
         setLoading(false);
@@ -38,16 +39,36 @@ export default function Mars() {
   const camerasForRover = CAMERA_OPTIONS[rover.toLowerCase()] || [];
 
   return (
-    <div className="min-h-screen bg-black text-white font-orbitron pt-24 px-6">
+    <div className="min-h-screen bg-black text-white font-orbitron pt-24 px-4 sm:px-6">
       {/* Navbar */}
       <nav className="w-full flex justify-between items-center py-4 px-6 bg-black/80 border-b border-white/20 fixed top-0 left-0 z-20 backdrop-blur-md">
         <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300 text-transparent bg-clip-text">DeepSpaceX</h1>
-        <div className="space-x-4">
+        
+        {/* Desktop Nav */}
+        <div className="hidden sm:flex space-x-4 text-sm sm:text-base">
           <Link to="/" className="hover:text-cyan-400 transition">Home</Link>
           <Link to="/apod" className="hover:text-cyan-400 transition">APOD</Link>
           <Link to="/mars" className="hover:text-cyan-400 transition">Mars</Link>
           <Link to="/epic" className="hover:text-cyan-400 transition">EPIC</Link>
           <Link to="/neo" className="hover:text-cyan-400 transition">NEOs</Link>
+          <Link to="/donki" className="hover:text-cyan-400 transition">DONKI</Link>
+          <Link to="/library" className="hover:text-cyan-400 transition">Library</Link>
+        </div>
+
+        {/* Mobile Hamburger */}
+        <div className="sm:hidden relative">
+          <button onClick={() => setMenuOpen(!menuOpen)} className="text-white border border-white px-2 py-1 rounded">☰</button>
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 bg-black border border-white p-4 rounded space-y-2 z-10">
+              <Link to="/" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Home</Link>
+              <Link to="/apod" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>APOD</Link>
+              <Link to="/mars" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Mars</Link>
+              <Link to="/epic" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>EPIC</Link>
+              <Link to="/neo" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>NEOs</Link>
+              <Link to="/donki" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>DONKI</Link>
+              <Link to="/library" className="block hover:text-cyan-400" onClick={() => setMenuOpen(false)}>Library</Link>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -82,7 +103,9 @@ export default function Mars() {
             </div>
           )}
 
-          <button onClick={fetchPhotos} className="px-4 py-1 bg-cyan-500 hover:bg-cyan-600 text-white rounded transition">Search</button>
+          <button onClick={fetchPhotos} className="px-4 py-1 bg-cyan-500 hover:bg-cyan-600 text-white rounded transition">
+            Search
+          </button>
         </div>
 
         {/* Gallery */}
